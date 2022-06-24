@@ -9,7 +9,7 @@ import { AuthService } from './services/auth.service';
     ConfigModule.forRoot(),
     JwtModule.register({
       secret: process.env.SECRET_WORD,
-      signOptions: { expiresIn: '10m' },
+      signOptions: { expiresIn: '60m' },
     }),
   ],
   controllers: [AuthController],
