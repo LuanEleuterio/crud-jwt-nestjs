@@ -8,8 +8,8 @@ export class CarsService {
 
   constructor(private readonly cars_repository: CarsRepository) {}
 
-  async create(car: CarsRequest): Promise<CarsResponse> {
-    const car_to_db = build_cars_db(car)   
+  async create(data: CarsRequest): Promise<CarsResponse> {
+    const car_to_db = build_cars_db(data)   
 
     const cars = await this.cars_repository.create(car_to_db);
 
@@ -32,5 +32,13 @@ export class CarsService {
   async delete(id: string): Promise<any> {
     const carDeleted = await this.cars_repository.deleteById(id)
     return carDeleted.affected
+  }
+
+  async update(id: string, data: CarsRequest): Promise<any> {
+    const car_to_db = build_cars_db(data)   
+
+    const carUpdated = await this.cars_repository.updateById(id, car_to_db)
+    console.log(carUpdated)
+    return carUpdated
   }
 }

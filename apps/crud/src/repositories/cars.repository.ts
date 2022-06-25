@@ -23,6 +23,10 @@ export class CarsRepository {
     return await this.cars_repository.find();
   }
 
+  async updateById(id: string, data: any): Promise<any> {
+    return await this.cars_repository.update(id, data);
+  }
+
   async deleteById(id: string): Promise<any> {
     return await this.cars_repository.delete(id);
   }

@@ -1,13 +1,11 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Res, UseGuards } from '@nestjs/common';
-import { CarNotFound } from '../../exceptions/car-not-found';
-import { InvalidSchema } from '../../exceptions/invalid-schema';
-import { IsNotUuidv4 } from '../../exceptions/is-not-uuidv4';
+import { InvalidSchema, IsNotUuidv4, CarNotFound } from '../../exceptions';
 import { CarsService } from '../../services/cars.service';
 import { JwtAuthGuard } from '../../shared/auth/jwt-auth.guard';
 import { isValidUuidv4 } from '../../shared/helpers/cars.helper';
 import { CarsRequest, CarsResponse } from './cars.dto';
 import { ICarsController } from './cars.interface';
-import { cars_schema } from './cars.schema';
+import { cars_schema, cars_update_schema } from './cars.schema';
 
 @Controller('/cars')
 export class CarsController implements ICarsController {
@@ -66,21 +64,25 @@ export class CarsController implements ICarsController {
 		}
 	}
 
-	@Put('/{id}')
+	@Put(':id')
 	@UseGuards(JwtAuthGuard)
-	updateById(id: string, data: any, @Res() res): Promise<void> {
+	async updateById(@Param('id') id: string, @Body() data: any, @Res() res): Promise<void> {
 		try {
 			if(!isValidUuidv4(id)) {
 				throw new IsNotUuidv4();
 			}
 
-			const validSchema = cars_schema.validateAsync(data, { allowUnknown: true})
+			const validSchema = cars_update_schema.validate(data)
 
 			if(validSchema.error) {
 				throw new InvalidSchema(validSchema.error)
 			}
 
-			{
+			const updated = await this.cars_service.update(id, data)
+
+			if(!updated){
+				throw new CarNotFound();
+			}
 
 			return res.status(HttpStatus.OK).send()
 		} catch (err) {

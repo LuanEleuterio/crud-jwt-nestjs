@@ -3,15 +3,15 @@ import { Cars } from "../../entities/cars.entity";
 
 export function build_cars_db(cars: CarsRequest): any {
   return {
-    make: cars.make,
-    model: cars.model,
-    year: cars.year,
-    technical_weight: cars.technical.weight,
-    technical_height: cars.technical.height,
-    technical_size: cars.technical.size,
-    technical_fuel_type: cars.technical.fuel_type,
-    technical_transmission: cars.technical.transmission,
-    technical_horses: cars.technical.horses
+    make: cars?.make,
+    model: cars?.model,
+    year: cars?.year,
+    technical_weight: cars?.technical?.weight,
+    technical_height: cars?.technical?.height,
+    technical_size: cars?.technical?.size,
+    technical_fuel_type: cars?.technical?.fuel_type,
+    technical_transmission: cars?.technical?.transmission,
+    technical_horses: cars?.technical?.horses
   }
 }
 
