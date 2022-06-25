@@ -1,16 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { AuthRequest, AuthResponse } from '../controllers/auth/auth.dto';
 import { JwtService } from '@nestjs/jwt';
-import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
+  logger: Logger;
 
   constructor(
     private jwtService: JwtService
-  ){}
+  ){
+    this.logger = new Logger(AuthService.name)
+  }
 
   genenateJWT(payload: AuthRequest): AuthResponse {
+    this.logger.log('JWT generated!')
     const access_token = this.jwtService.sign(payload)
     return {
       access_token
