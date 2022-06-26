@@ -1,22 +1,27 @@
-import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
 import { AuthModule } from '../../auth.module';
-import { AuthService } from '../../services/';
+import { AuthService } from '../../services';
+import { expect } from 'chai';
+import { Response } from 'express';
 
 describe('AuthController', () => {
-  let app: INestApplication
+  let authService: AuthService
+
+  let responseObject = {
+    status: 200,
+    message: 'Hello World!'
+  };
+
+  const response: Partial<Response> = {
+    status: jest.fn().mockImplementation().mockReturnValue(200),
+  }
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AuthModule],
-    })
-    .overrideProvider(AuthService)
-    .useValue(AuthService)
-    .compile();
+    }).compile()
 
-    app = moduleRef.createNestApplication();
-    await app.init();
+    authService = moduleRef.get<AuthService>(AuthService)
   });
 
   it('/POST auth generate token', () => {
@@ -25,9 +30,10 @@ describe('AuthController', () => {
       client_secret: '1234test'
     }
     
-    return request(app.getHttpServer())
-      .post('/auth')
-      .send(payload)
-      .expect(200)
+    jest.spyOn(authService, 'generateToken')
+
+    const result = authService.generateToken(payload)
+
+    expect(result).not.null
   });
 });

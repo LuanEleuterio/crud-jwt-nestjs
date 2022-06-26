@@ -12,7 +12,7 @@ export class AuthService {
     this.logger = new Logger(AuthService.name)
   }
 
-  genenateToken(payload: AuthRequest): AuthResponse {
+  generateToken(payload: AuthRequest): AuthResponse {
     this.logger.log('Access Token generated!')
     const access_token = this.jwtService.sign(payload)
     return {
