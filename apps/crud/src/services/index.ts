@@ -1,1 +1,1 @@
-export * from '@/crud/src/services/cars.service'
+export * from './cars.service'

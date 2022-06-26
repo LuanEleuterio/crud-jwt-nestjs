@@ -1,1 +1,1 @@
-export * from '@/crud/src/repositories/cars.repository'
+export * from './cars.repository'

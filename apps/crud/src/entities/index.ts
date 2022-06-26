@@ -1,1 +1,1 @@
-export * from '@/crud/src/entities/cars.entity'
+export * from './cars.entity'

@@ -1,2 +1,2 @@
-export * from '@/crud/src/shared/auth/jwt/jwt-auth.guard'
-export * from '@/crud/src/shared/auth/jwt/jwt.strategy'
+export * from './jwt/jwt-auth.guard'
+export * from './jwt/jwt.strategy'

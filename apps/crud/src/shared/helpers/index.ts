@@ -1,1 +1,1 @@
-export * from '@/crud/src/shared/helpers/cars/cars.helper'
+export * from './cars/cars.helper'

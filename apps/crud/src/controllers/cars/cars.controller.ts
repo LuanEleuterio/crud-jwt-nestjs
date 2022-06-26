@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, HttpStatus, Logger, Param, Post, Put, Res, UseGuards } from '@nestjs/common';
-import { ICarsController, CarsResponse, CarsRequest, cars_schema, cars_update_schema } from '@/crud/src/controllers';
-import { InvalidSchema, IsNotUuidv4, CarNotFound } from '@/crud/src/exceptions';
-import { CarsService } from '@/crud/src/services';
-import { JwtAuthGuard } from '@/crud/src/shared/auth';
-import { isValidUuidv4 } from '@/crud/src/shared/helpers';
+import { ICarsController, CarsResponse, CarsRequest, cars_schema, cars_update_schema } from '../../controllers';
+import { InvalidSchema, IsNotUuidv4, CarNotFound } from '../../exceptions';
+import { CarsService } from '../../services';
+import { JwtAuthGuard } from '../../shared/auth';
+import { isValidUuidv4 } from '../../shared/helpers';
 
 @Controller('/cars')
 export class CarsController implements ICarsController {
@@ -58,7 +58,8 @@ export class CarsController implements ICarsController {
 			return res.status(HttpStatus.OK).json(car);
 		} catch (err) {
 			this.logger.error(`ERROR: ${err.code || err.message|| err.stack}`)
-			return res.status(HttpStatus.BAD_REQUEST).json(err);
+			const code = err.statusCode || 400
+      return res.status(code).json(err)
 		}
 	}
 
@@ -80,7 +81,8 @@ export class CarsController implements ICarsController {
 			return res.status(HttpStatus.OK).json(cars);
 		}catch(err){
 			this.logger.error(`ERROR: ${err.code || err.message|| err.stack}`)
-			return res.status(HttpStatus.BAD_REQUEST).json(err);
+			const code = err.statusCode || 400
+      return res.status(code).json(err)
 		}
 	}
 
@@ -114,7 +116,8 @@ export class CarsController implements ICarsController {
 			return res.status(HttpStatus.OK).send()
 		} catch (err) {
 			this.logger.error(`ERROR: ${err.code || err.message|| err.stack}`)
-			return res.status(HttpStatus.BAD_REQUEST).json(err);
+			const code = err.statusCode || 400
+      return res.status(code).json(err)
 		}
 	}
 
@@ -140,7 +143,8 @@ export class CarsController implements ICarsController {
 			return res.status(HttpStatus.OK).send()
 		} catch (err) {
 			this.logger.error(`ERROR: ${err.code || err.message|| err.stack}`)
-			return res.status(HttpStatus.BAD_REQUEST).json(err);
+			const code = err.statusCode || 400
+      return res.status(code).json(err)
 		}
 	}
 }
