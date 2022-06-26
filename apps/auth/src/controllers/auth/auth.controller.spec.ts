@@ -1,22 +1,33 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { AuthController } from './auth.controller';
-import { AuthService } from '../../services/auth.service';
+import * as request from 'supertest';
+import { Test } from '@nestjs/testing';
+import { INestApplication } from '@nestjs/common';
+import { AuthModule } from '../../auth.module';
+import { AuthService } from '../../services/';
 
 describe('AuthController', () => {
-  let authController: AuthController;
+  let app: INestApplication
 
   beforeEach(async () => {
-    const app: TestingModule = await Test.createTestingModule({
-      controllers: [AuthController],
-      providers: [AuthService],
-    }).compile();
+    const moduleRef = await Test.createTestingModule({
+      imports: [AuthModule],
+    })
+    .overrideProvider(AuthService)
+    .useValue(AuthService)
+    .compile();
 
-    authController = app.get<AuthController>(AuthController);
+    app = moduleRef.createNestApplication();
+    await app.init();
   });
 
-  // describe('root', () => {
-  //   it('should return "Hello World!"', () => {
-  //     expect(authController.getHello()).toBe('Hello World!');
-  //   });
-  // });
+  it('/POST auth generate token', () => {
+    const payload = {
+      client_id: 'test1234',
+      client_secret: '1234test'
+    }
+    
+    return request(app.getHttpServer())
+      .post('/auth')
+      .send(payload)
+      .expect(200)
+  });
 });

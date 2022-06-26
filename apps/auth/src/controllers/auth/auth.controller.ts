@@ -1,6 +1,6 @@
-import { Body, Controller, Logger, Post } from '@nestjs/common';
-import { AuthRequest, AuthResponse } from '@/auth/src/controllers';
-import { AuthService } from '@/auth/src/services';
+import { Body, Controller, HttpStatus, Logger, Post, Res } from '@nestjs/common';
+import { AuthService } from '../../services';
+import { AuthRequest, AuthResponse } from './auth.dto';
 
 @Controller('/auth')
 export class AuthController {
@@ -10,8 +10,13 @@ export class AuthController {
     this.logger = new Logger(AuthController.name)
   }
   @Post()
-  auth(@Body() req: AuthRequest): AuthResponse {
-    this.logger.log('POST /auth initialized')
-    return this.authService.genenateJWT(req)
+  generateToken(@Body() req: AuthRequest, @Res() res): AuthResponse {
+    try {
+      this.logger.log('POST /auth initialized')
+      const token = this.authService.genenateToken(req)
+      return res.status(HttpStatus.OK).json(token)
+    } catch (error) {
+      return res.status(HttpStatus.BAD_REQUEST).json(error)
+    }
   }
 }

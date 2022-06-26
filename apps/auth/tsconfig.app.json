@@ -2,11 +2,10 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "declaration": false,
+    "rootDir": "./src",
+    "baseUrl": "./src",
     "outDir": "../../dist/apps/auth",
     "paths": {
-      "@/*": ["*"]
     }
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
 }
