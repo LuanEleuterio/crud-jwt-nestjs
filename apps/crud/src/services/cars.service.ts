@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { CarsRequest, CarsResponse } from '../controllers'
 import { CarsRepository } from '../repositories';
 import { build_cars_db, build_cars_response, build_list_cars_response } from '../shared/helpers';
+import { CarNotFound } from '../exceptions';
 
 @Injectable()
 export class CarsService {
@@ -39,6 +40,8 @@ export class CarsService {
     }
 
     this.logger.warn(`Does not exist car on db with id: ${id}`)
+
+    throw new CarNotFound();
   }
 
   async getAll(): Promise<CarsResponse[] | null> {
@@ -53,12 +56,16 @@ export class CarsService {
     }
 
     this.logger.warn('Does not exist cars in table')
+    throw new CarNotFound();
   }
 
   async delete(id: string): Promise<any> {
     this.logger.log('CarService.delete initalized')
     const carDeleted = await this.cars_repository.deleteById(id)
-    return carDeleted.affected
+    if(!carDeleted.affected){
+      this.logger.log('Car not found or not possible to delete this data')
+      throw new CarNotFound();
+    }
   }
 
   async update(id: string, data: CarsRequest): Promise<any> {
@@ -67,6 +74,10 @@ export class CarsService {
     this.logger.log('Transform data to structure to db.')
     const car_to_db = build_cars_db(data)   
     const carUpdated = await this.cars_repository.updateById(id, car_to_db)
-    return carUpdated.affected
+
+    if(!carUpdated.affected){
+      this.logger.log('Car not found or not possible to update this data')
+      throw new CarNotFound();
+    }
   }
 }

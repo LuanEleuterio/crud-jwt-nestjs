@@ -49,11 +49,6 @@ export class CarsController implements ICarsController {
 			this.logger.log('CarService.get called')
 			const car = await this.cars_service.get(id);
 
-			if(!car) {
-				this.logger.warn('Car not found!')
-				throw new CarNotFound();
-			}
-
 			this.logger.log('Get car success')
 			return res.status(HttpStatus.OK).json(car);
 		} catch (err) {
@@ -71,11 +66,6 @@ export class CarsController implements ICarsController {
 
 			this.logger.log('CarService.getAll called')
 			const cars = await this.cars_service.getAll();
-
-			if(!cars) {
-				this.logger.warn('Cars not found!')
-				throw new CarNotFound();
-			}
 
 			this.logger.log('Get car success')
 			return res.status(HttpStatus.OK).json(cars);
@@ -105,12 +95,7 @@ export class CarsController implements ICarsController {
 			}
 
 			this.logger.log('CarService.update called')
-			const updated = await this.cars_service.update(id, data)
-
-			if(!updated){
-				this.logger.log('Car not found or not possible to update this data')
-				throw new CarNotFound();
-			}
+			await this.cars_service.update(id, data)
 
 			this.logger.log('Car has been updated!')
 			return res.status(HttpStatus.OK).send()
@@ -132,12 +117,7 @@ export class CarsController implements ICarsController {
 			}
 
 			this.logger.log('CarService.delete called')
-			const deleted = await this.cars_service.delete(id);
-
-			if(!deleted){
-				this.logger.log('Car not found or not possible to delete this data')
-				throw new CarNotFound();
-			}
+			await this.cars_service.delete(id);
 
 			this.logger.log('Car has been deleted!')
 			return res.status(HttpStatus.OK).send()
