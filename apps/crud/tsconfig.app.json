@@ -2,7 +2,10 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "declaration": false,
-    "outDir": "../../dist/apps/crud"
+    "outDir": "../../dist/apps/crud",
+    "paths": {
+      "@/*": ["*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]

@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { AuthRequest, AuthResponse } from '../controllers/auth/auth.dto';
+import { AuthRequest, AuthResponse } from '@/auth/src/controllers';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()

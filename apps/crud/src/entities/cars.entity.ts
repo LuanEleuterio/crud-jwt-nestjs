@@ -1,5 +1,5 @@
 import { Column, Entity, Generated, PrimaryColumn } from "typeorm";
-import { CarsFuelType, CarsSize, CarsTransmission } from "../enum";
+import { CarsFuelType, CarsSize, CarsTransmission } from "@/crud/src/enum";
 
 @Entity()
 export class Cars {

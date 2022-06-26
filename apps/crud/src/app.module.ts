@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { CarsController } from './controllers/cars/cars.controller';
-import { Cars } from './entities/cars.entity';
-import { CarsRepository } from './repositories/cars.repository';
-import { CarsService } from './services/cars.service';
-import { JwtStrategy } from './shared/auth/jwt.strategy';
+import { CarsController } from '@/crud/src/controllers';
+import { Cars } from '@/crud/src/entities';
+import { CarsRepository } from '@/crud/src/repositories';
+import { CarsService } from '@/crud/src/services';
+import { JwtStrategy } from '@/crud/src/shared/auth';
 
 @Module({
   imports: [

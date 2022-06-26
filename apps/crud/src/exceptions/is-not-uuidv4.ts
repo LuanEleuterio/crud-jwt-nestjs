@@ -1,4 +1,4 @@
-import { CodedError } from "./coded-error";
+import { CodedError } from '@/crud/src/exceptions';
 
 export class IsNotUuidv4 extends CodedError {
   constructor(){

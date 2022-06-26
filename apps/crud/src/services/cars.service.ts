@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CarsRequest, CarsResponse } from '../controllers/cars/cars.dto';
-import { CarsRepository } from '../repositories/cars.repository';
-import { build_cars_db, build_cars_response, build_list_cars_response } from '../shared/helpers/cars.helper';
+import { CarsRequest, CarsResponse } from '@/crud/src/controllers'
+import { CarsRepository } from '@/crud/src/repositories';
+import { build_cars_db, build_cars_response, build_list_cars_response } from '@/crud/src/shared/helpers';
 
 @Injectable()
 export class CarsService {

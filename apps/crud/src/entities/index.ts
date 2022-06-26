@@ -1,0 +1,1 @@
+export * from '@/crud/src/entities/cars.entity'
