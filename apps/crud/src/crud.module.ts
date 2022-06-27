@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { CarsController } from '@/crud/src/controllers';
-import { Cars } from '@/crud/src/entities';
-import { CarsRepository } from '@/crud/src/repositories';
-import { CarsService } from '@/crud/src/services';
-import { JwtStrategy } from '@/crud/src/shared/auth';
+import { CarsController } from './controllers';
+import { Cars } from './entities';
+import { CarsRepository } from './repositories';
+import { CarsService } from './services';
+import { JwtStrategy } from './shared/auth';
 
 @Module({
   imports: [
@@ -26,6 +26,6 @@ import { JwtStrategy } from '@/crud/src/shared/auth';
   controllers: [CarsController],
   providers: [CarsService, JwtStrategy, CarsRepository],
 })
-export class AppModule {
+export class CrudModule {
   constructor(private dataSource: DataSource) {}
 }

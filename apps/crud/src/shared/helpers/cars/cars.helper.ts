@@ -1,5 +1,5 @@
-import { CarsRequest } from '@/crud/src/controllers';
-import { Cars } from '@/crud/src/entities';
+import { CarsRequest } from '../../../controllers';
+import { Cars } from '../../../entities';
 
 export function build_cars_db(cars: CarsRequest): any {
   return {

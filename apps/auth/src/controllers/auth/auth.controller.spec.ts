@@ -1,19 +1,24 @@
 import { Test } from '@nestjs/testing';
+import { expect } from 'chai';
 import { AuthModule } from '../../auth.module';
 import { AuthService } from '../../services';
-import { expect } from 'chai';
+import { AuthController } from '../../controllers';
 import { Response } from 'express';
+import { InvalidSchema } from '../../exceptions';
 
 describe('AuthController', () => {
   let authService: AuthService
+  let authController: AuthController
 
-  let responseObject = {
-    status: 200,
-    message: 'Hello World!'
-  };
+  let responseObject = {}
 
   const response: Partial<Response> = {
-    status: jest.fn().mockImplementation().mockReturnValue(200),
+    statusCode: 0,
+    status: jest.fn().mockReturnValue({
+      json: jest.fn().mockImplementation((JSONdata) => {
+          responseObject = JSONdata;
+      })
+    })
   }
 
   beforeEach(async () => {
@@ -22,18 +27,31 @@ describe('AuthController', () => {
     }).compile()
 
     authService = moduleRef.get<AuthService>(AuthService)
+    authController = moduleRef.get<AuthController>(AuthController)
   });
 
   it('/POST auth generate token', () => {
-    const payload = {
+    const request = {
       client_id: 'test1234',
       client_secret: '1234test'
     }
-    
-    jest.spyOn(authService, 'generateToken')
 
-    const result = authService.generateToken(payload)
+    jest.spyOn(authController, 'generateToken')
 
-    expect(result).not.null
+    authController.generateToken(request, response as Response)
+    expect(responseObject).not.null
+  });
+
+  it('/POST auth throw Invalid Schem when client_id not send', () => {
+    const request = {
+      client_secret: '1234test'
+    }
+
+    jest.spyOn(authController, 'generateToken')
+
+    // @ts-ignore
+    authController.generateToken(request, response as Response)
+
+    expect(responseObject).to.be.instanceOf(InvalidSchema);
   });
 });

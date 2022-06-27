@@ -12,18 +12,18 @@ export class AuthController {
     this.logger = new Logger(AuthController.name)
   }
   @Post()
-  generateToken(@Body() req: AuthRequest, @Res() res?): AuthResponse {
+  generateToken(@Body() data: AuthRequest, @Res() res?): AuthResponse {
     try {
       this.logger.log('POST /auth initialized')
 
-      const validSchema = auth_schema.validate(req)
+      const validSchema = auth_schema.validate(data)
 
 			if(validSchema.error) {
 				this.logger.warn('Schema is not valid!')
 				throw new InvalidSchema(validSchema.error)
 			}
 
-      const token = this.authService.generateToken(req)
+      const token = this.authService.generateToken(data)
 
       return res.status(HttpStatus.OK).json(token)
     } catch (error) {
