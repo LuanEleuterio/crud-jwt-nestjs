@@ -53,5 +53,5 @@ Para validar as informações enviadas nas requisições de forma simplificada, 
 
 
 
-- Author - [Luan Eleuterio](https://kamilmysliwiec.com)
+- Author - [Luan Eleuterio](https://www.linkedin.com/in/luan-eleutério/)
 
