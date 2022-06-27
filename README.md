@@ -44,7 +44,7 @@ Como estamos utilizando NestJS com MonoRepo, usamos a lib 'concurrently' para qu
 Para teste, execute o comando abaixo:
 ```bash
 # unit tests
-$ npm run test
+$ npm test
 ```
 Os casos de testes contemplam cenários de sucesso e erros, validandos seus retornos e chamadas.
 
