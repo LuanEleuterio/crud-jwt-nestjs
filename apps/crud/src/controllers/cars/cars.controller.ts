@@ -80,6 +80,12 @@ export class CarsController implements ICarsController {
 	@UseGuards(JwtAuthGuard)
 	async updateById(@Param('id') id: string, @Body() data: any, @Res() res): Promise<void> {
 		try {
+
+			if(!Object.keys(data).length){
+				this.logger.warn('PUT /cars Body is empty	')
+				throw new InvalidSchema()
+			}
+
 			this.logger.log('PUT /cars initialized')
 			if(!isValidUuidv4(id)) {
 				this.logger.warn('uuidv4 is not valid!')

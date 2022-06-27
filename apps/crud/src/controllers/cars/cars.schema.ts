@@ -14,7 +14,7 @@ export const cars_schema = Joi.object({
     }).required()
 })
 
-export const cars_update_schema = Joi.object().keys({
+export const cars_update_schema = Joi.object({
   make: Joi.string().max(50),
   model: Joi.string().max(50),
   year: Joi.number(),
@@ -26,4 +26,4 @@ export const cars_update_schema = Joi.object().keys({
     transmission: Joi.string(),
     horses: Joi.number(),
   })
-})
+}).required()
