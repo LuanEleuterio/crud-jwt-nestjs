@@ -1,0 +1,390 @@
+openapi: 3.0.1
+info:
+  title: Swagger Simple Crud
+  description: Essa é uma simples API que disponibiliza funções de criação, consulta,
+    listagem e deleção de carros. Os endpoints desta API são autenticados por token
+    JWT e os dados armazenados no Postgres.
+  version: 1.0.0
+servers:
+- url: http://localhost:3000/
+  description: 'AUTH Server'
+- url: http://localhost:3001/
+  description: 'CRUD Server'
+tags:
+- name: auth
+  description: Endpoint de autenticação
+- name: crud
+  description: Endpoint de Cars
+paths:
+  /auth:
+    post:
+      tags:
+      - auth
+      summary: Gera um token JWT para acesso aos endpoints CRUD
+      requestBody:
+        description: Body necessário para gerar um token JWT
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Auth'
+        required: true
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessToken'
+        400:
+          description: Invalid input or missing fields
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidSchema'
+      x-codegen-request-body-name: body
+      
+  /cars:
+    post:
+      tags:
+      - crud
+      summary: Cria um novo carro no banco de dados
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Body necessário para criar um carro
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSchema'
+        required: true
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarResponse'
+        400:
+          description: Invalid input or missing fields
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidSchema'
+      x-codegen-request-body-name: body  
+    get:
+      tags:
+      - crud
+      summary: Lista todos os carros
+      security:
+        - bearerAuth: []
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarResponse'
+        400:
+          description: Invalid input or missing fields
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidSchema'
+      x-codegen-request-body-name: body  
+  /cars/{id}:
+    get:
+      tags:
+      - crud
+      summary: Busca um carro por ID
+      parameters:
+      - name: id
+        in: path
+        description: ID do carro
+        required: true
+        schema:
+          type: string
+          format: uuidv4
+      security:
+        - bearerAuth: []
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarResponse'
+        400:
+          description: id enviado é invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IsNotUuidv4'
+        404:
+          description: O carro em especifico não foi encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarNotFound'
+      x-codegen-request-body-name: body 
+    put: 
+      tags:
+      - crud
+      summary: Busca um carro por ID
+      parameters:
+      - name: id
+        in: path
+        description: ID do carro
+        required: true
+        schema:
+          type: string
+          format: uuidv4
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Body necessário para atualizar as propriedades do carro. Envie somente o(s) atributo(s) que deseja alterar
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSchema'
+      responses:
+        201:
+          description: Success
+          content: {}
+        400:
+          description: Retorno de erros
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/InvalidSchema'
+                  - $ref: '#/components/schemas/IsNotUuidv4'
+              examples:
+                InvalidSchema:
+                  $ref: '#/components/schemas/InvalidSchema'
+                IsNotUuidv4:
+                  $ref: '#/components/schemas/IsNotUuidv4'
+        404:
+          description: O carro em especifico não foi encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarNotFound'
+      x-codegen-request-body-name: body 
+    delete:
+      tags:
+      - crud
+      summary: Deleta um carro por ID
+      parameters:
+      - name: id
+        in: path
+        description: ID do carro
+        required: true
+        schema:
+          type: string
+          format: uuidv4
+      security:
+        - bearerAuth: []
+      responses:
+        201:
+          description: Deleted
+          content: {}
+        400:
+          description: id enviado é invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IsNotUuidv4'
+        404:
+          description: O carro em especifico não foi encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarNotFound'
+      x-codegen-request-body-name: body 
+components:
+  schemas:
+    Auth:
+      required:
+      - client_id
+      - client_secret
+      type: object
+      properties:
+        client_id:
+          type: string
+          example: "1234"
+        client_secret:
+          type: string
+          example: "4321"
+    AccessToken:
+      type: object
+      properties:
+        access_token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnRfaWQiOiIxMjM0IiwiY2xpZW50X3NlY3JldCI6IjQzMjEiLCJpYXQiOjE2NTYyOTczNDYsImV4cCI6MTY1NjMwMDk0Nn0.scD_VblpulxrOEZ8pd7dkuKe-yNSfpgG_Yfk1JQM1IA"
+    CreateSchema:
+      type: object
+      properties:
+        make:
+          type: string
+          example: 'Tesla'
+        model:
+          type: string
+          example: 'Model S'
+        year:
+          type: integer
+          example: 2022
+        technical:
+          type: object
+          properties:
+            weight:
+              type: number
+              example: 1099.99
+            height:
+              type: number
+              example: 1.99
+            size:
+              type: string
+              example: 'MIDSIZE'
+              enum:
+                - COMPACT
+                - MIDSIZE
+                - LARGE
+            fuel_type:
+              type: string
+              example: 'ENERGY'
+              enum:
+                - ENERGY
+                - HYBRID
+                - DIESEL
+                - GAS
+                - FLEX
+                - GASOLINE
+            transmission:
+              type: string
+              example: 'AUTOMATIC'
+              enum: 
+                - AUTOMATIC
+                - MANUAL
+            horses: 
+              type: integer
+              example: 47
+    CarResponse: 
+      type: object
+      properties:
+        id:
+          type: string
+          example: "6bb3ce5d-2449-45a7-b3d0-c8c2e6d8cde7"
+        make:
+          type: string
+          example: 'Tesla'
+        model:
+          type: string
+          example: 'Model S'
+        year:
+          type: integer
+          example: 2022
+        technical:
+          type: object
+          properties:
+            weight:
+              type: number
+              example: 1099.99
+            height:
+              type: number
+              example: 1.99
+            size:
+              type: string
+              example: 'MIDSIZE'
+              enum:
+                - COMPACT
+                - MIDSIZE
+                - LARGE
+            fuel_type:
+              type: string
+              example: 'ENERGY'
+              enum:
+                - ENERGY
+                - HYBRID
+                - DIESEL
+                - GAS
+                - FLEX
+                - GASOLINE
+            transmission:
+              type: string
+              example: 'AUTOMATIC'
+              enum: 
+                - AUTOMATIC
+                - MANUAL
+            horses: 
+              type: integer
+              example: 47
+    InvalidSchema:
+      type: object
+      properties:
+        code: 
+          type: string
+          example: 'INVALID_SCHEMA'
+        message:
+          type: string
+          example: 'Invalid schema!'
+        statusCode:
+          type: integer
+          example: 400
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/DetailsOfInvalidSchema' 
+    DetailsOfInvalidSchema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "\"client_id\" is required"
+        path: 
+          type: array
+          items:
+            type: string
+            example: 'client_id'
+        type:
+          type: string
+          example: 'any.required'
+        context:
+          type: object
+          properties:
+            label:
+              type: string
+              example: 'client_id'
+            key:
+              type: string
+              example: 'client_id'
+    CarNotFound:
+      type: object
+      properties:
+        code:
+          type: string
+          example: 'CAR_NOT_FOUND'
+        messsage:
+          type: string
+          example: 'Car not found!'
+        statusCode: 
+         type: number
+         example: 404
+    IsNotUuidv4:
+      type: object
+      properties:
+        code:
+          type: string
+          example: 'IS_NOT_UUIDV4'
+        messsage:
+          type: string
+          example: 'The value sended is not an uuidv4'
+        statusCode: 
+         type: number
+         example: 400 
+  securitySchemes:
+    bearerAuth:            
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
