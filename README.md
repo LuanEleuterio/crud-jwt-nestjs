@@ -5,6 +5,13 @@ Uma simples aplicação de CRUD com NestJS e autenticação JWT.
 
 Documentação da [API Swagger](https://github.com/LuanEleuterio/crud-jwt-nestjs/blob/8e2d67fda04e0f95e10c581435656d619f071037/swagger.yml)
 
+## Swagger
+
+Para ver as documentações, realize o Step 3 e acesse:
+
+Auth API: http://localhost:3000/swagger
+Crud API: http://localhost:3001/swagger
+
 ## Get Started
 
 ### Step 1 - Enviroment variebles
@@ -50,7 +57,6 @@ Os casos de testes contemplam cenários de sucesso e erros, validandos seus reto
 
 ## Validações
 Para validar as informações enviadas nas requisições de forma simplificada, foi utlizado a lib [Joi](https://joi.dev) para realização de toda validação de tipagem, atributos obrigatórios, atributos não mapeados, etc. 
-
 
 
 - Author - [Luan Eleuterio](https://www.linkedin.com/in/luan-eleutério/)

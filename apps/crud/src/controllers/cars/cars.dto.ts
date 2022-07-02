@@ -1,3 +1,4 @@
+import { ApiProperty } from "@nestjs/swagger"
 import { CarsFuelType, CarsSize, CarsTransmission } from "../../enum"
 
 export type CarsRequest = {
